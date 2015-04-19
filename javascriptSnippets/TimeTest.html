@@ -1,0 +1,54 @@
+<head>
+Example of Speed benchmarking test class
+</head>
+<body>
+
+<script>
+
+function SpeedTest(testImplement, testParams, repetitions) {
+	this.testImplement = testImplement;
+	this.testParams = testParams;
+	this.repetitions = repetitions ? repetitions : 100;
+}
+
+SpeedTest.prototype = {
+	startTest: function() {
+		var beginTime, endTime, sumTimes=0;
+		for (var i=0, x=this.repetitions; i<x; i++) {
+			beginTime = +new Date();
+			this.testImplement (this.testParams);
+			endTime = +new Date();
+			sumTimes += endTime - beginTime;
+		}
+		this.average = sumTimes / this.repetitions;
+		console.log("Average execution across " +
+			this.repetitions + ": " +
+			this.average);
+	}
+}
+
+
+var noBestPractices = function (testParams) {
+	var arr = [];
+	for (var i=0; i < testParams.loops; i++) {
+		var num = new Number(i);
+		arr.push(num);
+	}
+}
+
+var bestPractices = function (testParams) {
+	var arr = [];
+	for (var i=0, loops=testParams.loops ; i < loops; i++) {
+		arr.push(new Number(i));
+	}
+}
+
+var speedTest = new SpeedTest(noBestPractices, {loops:1000},20000);
+speedTest.startTest();
+
+var speedTestWithBp = new SpeedTest(bestPractices, {loops:1000},20000);
+speedTestWithBp.startTest();
+
+
+</script>
+</body>

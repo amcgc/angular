@@ -1,0 +1,28 @@
+<head>
+Example of This
+</head>
+<body>
+
+<script>
+console.log("Properties cannot reference oneanother during literal creation. properties are initalized, but not assigned before next one is initalized ");
+
+var obj;
+console.log(
+obj = {
+	a : 1,
+	b : this.a ,
+	c : (function() {console.log(this.a)})(),
+	d : this.a,
+	e : (function() { this.b = this.a; return this.a })()
+	}
+
+);
+console.log(obj);
+
+var someString="bracketAddedProp";
+obj[someString] = "bracketAddedValue";
+console.log("Can use bracket notation to set properties given string"+JSON.stringify(obj));
+
+
+</script>
+</body>

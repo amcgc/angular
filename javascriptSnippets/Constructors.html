@@ -1,0 +1,21 @@
+<head>
+Example of This
+</head>
+<body>
+
+<script>
+
+function Person(age) {
+	this.age = age;
+	console.log(this);
+}
+
+var me = Person(1); // this defaults to window without new
+
+var meNew = new Person(10); // creates a new object and sets == this , prototype === Person
+
+var newMeViaobject = new Object(); // equivalent, except prototype === Object
+Person.call(newMeViaobject, 99);
+
+</script>
+</body>

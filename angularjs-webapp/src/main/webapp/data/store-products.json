@@ -1,0 +1,50 @@
+[
+	            {
+	            	"name": "Diamond",
+	            	"price": 9.98,
+	            	"description": "Diamonds are shiny",
+	            	"canPurchase": true,
+	            	"soldOut" : false,
+	            	"shine": "Very shiny",
+	            	"faces": 10,
+	            	"rarity": "Very rare",
+	            	"color": "White",
+	            	"images": ["diamond.jpg","diamond2.jpg"],
+	            	"reviews" : [
+	            	           {
+	            	        	   "stars": 5,
+	            	        	   "body": "I really like diamonds",
+	            	        	   "author": "alex.cheers@gmail.com"
+	            	           },
+	            	           {
+	            	        	   "stars": 1,
+	            	        	   "body": "I dont really like diamonds",
+	            	        	   "author": "dontLikeDiamonds@gmail.com"
+	            	           }
+	            	           ]
+	            },
+	            {
+	            	"name": "Ruby",
+	            	"price": 4.98,
+	            	"description": "Rubies are red",
+	            	"canPurchase": true,
+	            	"soldOut" : false,
+	            	"shine": "Medium",
+	            	"faces": 6,
+	            	"rarity": "Common",
+	            	"color": "Red",
+	            	"images": ["ruby.jpg","ruby2.jpg"],
+	            	"reviews" : [
+	            	           {
+	            	        	   "stars": 3,
+	            	        	   "body": "I really like rubies",
+	            	        	   "author": "alex.cheers@gmail.com"
+	            	           },
+	            	           {
+	            	        	   "stars": 1,
+	            	        	   "body": "I dont really like rubies",
+	            	        	   "author": "dontLikeRubies@gmail.com"
+	            	           }
+	            	           ]
+	            }
+	            ]

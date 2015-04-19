@@ -1,0 +1,35 @@
+<head>
+Example of assignment using OR logical operator:  OR operator returns first truthy value - not a true boolean, else last option if all false
+When used in a conditional statement, the result of the || is then re-evaluated for truthyness
+This corresponds with conditional statements evaluating expressions as truthy/falsey - the OR returns a value which then evaluates truthy/falsey
+
+AND returns last truthy value or first falsey value to be used in conditional block or assignment
+</head>
+<body>
+<script>
+
+var armory = {
+	addSword: function (newSword) {
+		this.swords = this.swords || [];
+		this.swords.push(newSword);
+	}
+};
+
+var evaluatesAsTruthyvalue = armory.swords || [];
+console.log(evaluatesAsTruthyvalue);
+
+console.log(armory.swords || [] ? true : false);
+
+console.log(armory.swords);
+
+armory.addSword("Broadsword");
+
+console.log(armory.swords);
+
+console.log(armory.chest || false || "");
+
+
+console.log("&& returns last truthy or first falsey  " + (true && "truthyString") );
+
+</script>
+</body>

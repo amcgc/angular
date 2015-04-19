@@ -1,0 +1,27 @@
+<head>
+Example of This
+</head>
+<body>
+
+<script>
+function Person () {
+	// Private
+	var name = "Robert";
+
+		this.getName = function () {
+			return name;
+		};
+		this.setName = function (newName) {
+			name = newName;
+		}
+
+};
+
+var person = new Person();
+alert(person.name); // Undefined
+alert(person.getName()); // "Robert"
+person.setName(prompt("Please enter new name"));
+alert(person.getName()); // "Robert Nyman"
+
+</script>
+</body>

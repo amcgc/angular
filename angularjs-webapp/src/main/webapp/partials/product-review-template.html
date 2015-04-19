@@ -1,0 +1,42 @@
+<h4>Reviews</h4>
+<ul>
+	<li ng-repeat="existingReview in product.reviews">
+		<blockquote>
+			<strong>{{existingReview.stars}} stars</strong>
+			<p>{{existingReview.body}}</p>
+			<cite class="clearfix">-{{existingReview.author}} on
+				{{existingReview.createdOn | date}}</cite>
+		</blockquote>
+	</li>
+</ul>
+<!--  Prevent form submit unless valid
+				Disable browser-specific validations via novalidate -->
+<form name="reviewForm" ng-controller="ReviewController as reviewCtrl"
+	ng-submit="reviewForm.$valid && reviewCtrl.addReview(product)"
+	novalidate>
+	<blockquote>
+		<strong>{{reviewCtrl.review.stars}} Stars</strong>
+		<p>{{reviewCtrl.review.body}}</p>
+		<cite class="clearfix">-{{reviewCtrl.review.author}}</cite>
+	</blockquote>
+	<h4>Submit a Review</h4>
+	<fieldset class="form-group">
+		<select ng-model="reviewCtrl.review.stars" class="form-control"
+			ng-options="stars for stars in [5,4,3,2,1]" title="Stars" required>
+			<option value="">Rate the Product</option>
+		</select>
+	</fieldset>
+	<fieldset class="form-group">
+		<textarea ng-model="reviewCtrl.review.body" class="form-control"
+			placeholder="Please write a short review..." title="Review" required></textarea>
+	</fieldset>
+	<fieldset class="form-group">
+		<input ng-model="reviewCtrl.review.author" type="email"
+			class="form-control" placeholder="john.smith@example.com"
+			title="Email" required />
+	</fieldset>
+	<fieldset class="form-group">
+		<input type="submit" class="btn btn-primary pull-right"
+			value="Submit Review" />
+	</fieldset>
+</form>

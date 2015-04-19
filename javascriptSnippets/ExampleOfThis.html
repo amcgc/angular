@@ -1,0 +1,24 @@
+<head>
+Example of This
+</head>
+<body>
+
+<script>
+
+var object = new Object();
+object.name = prompt("please enter name");
+object.someFunction= function() {
+	alert(this.name);
+};
+
+var object2 = {
+	name: "Hannah"
+};
+object2.someFunction = object.someFunction;
+
+object2.someFunction();
+
+object2.someFunction.call(object);
+
+</script>
+</body>
