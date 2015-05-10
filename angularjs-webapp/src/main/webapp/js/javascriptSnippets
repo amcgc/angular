@@ -1,0 +1,228 @@
+angular.module('NoteWrangler', ['ngRoute'])
+.config(function($routeProvider) {
+  $routeProvider.when('/notes', {
+    templateUrl: 'templates/pages/notes/index.html' 
+  });
+});
+
+// add controller with logic, accessible within index.html
+angular.module('NoteWrangler', ['ngRoute'])
+.config(['$routeProvider', function($routeProvider) {
+  $routeProvider
+    .when('/', {
+      redirectTo: '/users'
+    })
+    .when('/notes', {
+      templateUrl: 'templates/pages/notes/index.html',
+      controller: function($http) {
+        var that = this;
+        $http({method:'GET',url:'/notes'})
+        .success(function(data) {that.notes=data;});
+      },
+      controllerAs: 'notesCtrl'
+      
+    })
+    
+// add an external controller
+angular.module('NoteWrangler', ['ngRoute'])
+.config(['$routeProvider', function($routeProvider) {
+  $routeProvider
+    .when('/', {
+      redirectTo: '/users'
+    })
+    .when('/notes', {
+      templateUrl: 'templates/pages/notes/index.html',
+      controller: 'orReferToExternalConrollerName'
+      controllerAs: 'notesCtrl'
+      
+    })
+
+// access RouteParams 
+angular.module('NoteWrangler')
+.controller('NotesShowController', ['$routeParams', '$http', function($routeParams, $http) {
+  var that = this;
+  $http({method:'GET', url:'/notes/'+$routeParams.id})
+  .success(function(data){that.note=data;});
+
+}]);
+
+
+// directive with isolate scope
+angular.module('NoteWrangler')
+.directive('nwCard', function() {
+  return {
+    restrict: 'E',
+    templateUrl: 'templates/directives/nw-card.html',
+    scope : {
+      header: '=',
+      description: '='
+    },
+    controller: function ($scope) {
+    	$scope.allDetails = $scope.header + ' ' + $scope.description;
+  };
+});
+<nw-card header="parentsObj.someValue" description="parentsObj.someOther"></nw-card>
+new-card.html then directly refers to {{header}} and {{description}} - which are on the directive's scope
+
+
+
+// Service defined using Factory recipe, w/ injected $http service
+angular.module('NoteWrangler')
+.factory('Note', ['$http', function NoteFactory($http) {
+  return {
+    all: function () {
+    	return $http({method: 'GET', url: '/notes'});
+    } 
+  };
+}]);
+
+
+// service defined w/ Factory, directly returning http POST request, used by a Controller
+angular.module('NoteWrangler')
+.factory('Tweetable', ['$http', function TweetableFactory ($http) {
+  return function(potentialTweet) {
+    return $http(
+      {method: 'POST', 
+       url: 'http://gentle-spire-1153.herokuapp.com/tweet', 
+       data:{description: potentialTweet}});
+  }; 
+}
+] );
+angular.module('NoteWrangler')
+.controller('NotesIndexController', ['$scope', 'Note','Tweetable', function($scope, Note, Tweetable) {
+  Note.all().success(function(data) {
+    $scope.notes = data;
+  });
+  $scope.tweetThatNote = function(description){
+    Tweetable(description).success(
+      function(data) {
+        console.log(data);
+      }
+    );
+  };
+}]);
+
+// Provider exposing config setter, set in module's config
+angular.module('NoteWrangler')
+.provider('Tweetable', [function TweetableProvider() {
+  var characterLength = 144;
+  
+  this.$get = function($http) {
+  return function(potentialTweet) {
+    return $http({
+      method: 'POST',
+      url: 'http://gentle-spire-1153.herokuapp.com/tweet',
+      data: {
+        description: potentialTweet,
+        maxLength: characterLength
+      }
+    });
+  };
+  };
+  
+  this.setLength = function(length) {
+  	characterLength = length;
+  };
+}]);
+angular.module('NoteWrangler', ['ngRoute'])
+.config(function(TweetableProvider) {
+  TweetableProvider.setLength(40);
+});
+
+ 
+ 
+ // Import ngResource and return resource (pointing to /notes as a Service's only function, adding custom function tweetIt), and GET via query
+ angular.module('NoteWrangler', ['ngRoute', 'ngResource'])
+.config(function(TweetableProvider) {
+  TweetableProvider.setLength(144);
+});
+
+angular.module('NoteWrangler')
+.factory('Note',['$resource', function NoteFactory($resource) {
+  return $resource('/notes', {}, {
+    tweetIt: {method: 'PUT'}
+  });
+}]);
+
+
+angular.module('NoteWrangler')
+.controller('NotesIndexController', ['$scope', 'Note', 'Tweetable', function($scope, Note, Tweetable) {
+  $scope.notes = Note.query();
+  
+  $scope.tweetThatNote = function(noteToTweet) {
+    Tweetable(noteToTweet).success(function(status) {
+      console.log(status);
+    });
+  };
+}]);
+
+// nwNav Parent directive exposing API for child nwNavItem's use
+angular.module('NoteWrangler')
+.directive('nwNav', function() {
+  return {
+    restrict: 'E',
+    controller: function($scope) {
+      $scope.activeNav='Notes';
+      
+      this.getActiveNav = function () {return $scope.activeNav;};      
+      this.setActiveNav = function(activeNav)  {$scope.activeNav = activeNav;};
+      
+      return this;
+    }
+  };
+});
+angular.module('NoteWrangler')
+.directive('nwNavItem', function() {
+  return {
+    restrict: 'E',
+    templateUrl: './templates/directives/nw-nav-item.html',
+    require: '^nwNav',
+    link: function(scope, element, attrs, nwNavCtrl) {
+      scope.isActive = function() {
+				return (nwNavCtrl.getActiveNav()===scope.name);
+      };
+
+      scope.activate = function() {
+				nwNavCtrl.setActiveNav(scope.name);
+      };
+    },
+    scope: {
+      name : '@'
+    }
+  };
+});
+/// used with nw-nav-item.html
+<a class="list-item" ng-class="{'active' : isActive()}" ng-click="activate()" 
+   ng-href="#/{{name | lowercase}}"> {{name}} </a>
+
+
+// wrap 3rd party library in reusable directive, attached to markup
+angular.module('NoteWrangler')
+.directive('nwSlabText', function($timeout) {
+  return function(scope, element) {
+    $timeout( function() {
+      $(element).slabText();
+    });
+  };
+} );
+
+<h2 class="h3" nw-slab-text>{{header}}</h2>
+
+// wrap bootstrap popover in a popover angular directive, cleaning up on destroy
+angular.module('NoteWrangler')
+.directive('popover', function($timeout) {
+  return function(scope, element, attrs) {
+    $timeout(function() {
+      $(element).popover({
+        trigger: 'hover',
+        content:attrs.popover
+      });
+    });
+    scope.$on('$destroy', function() {
+              $(element).popover('destroy');
+              });
+    
+	};
+});
+
+<div class="card" popover="{{note.title}} {{note.tweetedDate | date: 'MMM. dd'}}">
